@@ -1,3 +1,5 @@
+# docker-deepspeech-server
+
 ```
 root@4523baca8854:/deepspeech/server# python3 transcriber.py --audio /deepspeech/data/clips/11ca9350-8080-11e9-a63e-8126837dd92a/1f86af61ca1b6737b9e9a7e1e702a
 bab.wav --model /deepspeech/models --aggressive 0
@@ -35,10 +37,4 @@ DEBUG:root:*********************************************************************
 1f86af61ca1b6737b9e9a7e1e702abab.wav 2.320                1.262                0.060                0.000
 root@4523baca8854:/deepspeech/server# more /deepspeech/data/clips/11ca9350-8080-11e9-a63e-8126837dd92a/1f86af61ca1b6737b9e9a7e1e702abab.txt
 Be di'r dyddiad?
-root@4523baca8854:/deepspeech/server# exit
-exit
-techiaith@lwk1900002:~/docker/docker-deepspeech-server-cy$ git status
-fatal: not a git repository (or any of the parent directories): .git
-techiaith@lwk1900002:~/docker/docker-deepspeech-server-cy$ git init
-Initialized empty Git repository in /home/techiaith/docker/docker-deepspeech-server-cy/.git/
 ```
