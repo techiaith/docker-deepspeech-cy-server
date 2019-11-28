@@ -4,3 +4,4 @@ celery==4.2.1
 deepspeech==0.5.1
 webrtcvad
 numpy
+jiwer

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import sys
 import os
 import logging
@@ -6,6 +8,8 @@ import subprocess
 import shlex
 import numpy as np
 import wavTranscriber
+
+from jiwer import wer
 
 # Debug helpers
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
@@ -47,6 +51,18 @@ def main(args):
 
         # Run VAD on the input file
         waveFile = args.audio
+        textFilePath = waveFile.rstrip(".wav") + ".txt"
+        save_transcript = True
+        reference_transcript=''
+        if os.path.exists(textFilePath):
+            logging.debug("Found Transcript @: %s" % textFilePath)
+            save_transcript = False
+            f = open(textFilePath, 'r')
+            reference_transcript=f.read()
+        else:
+            logging.debug("Saving Transcript @: %s" % textFilePath)
+            f = open(textFilePath, 'w')
+
         segments, sample_rate, audio_length = wavTranscriber.vad_segment_generator(waveFile, args.aggressive)
 
         for i, segment in enumerate(segments):
@@ -57,6 +73,15 @@ def main(args):
             inference_time += output[1]
             logging.debug("Transcript: %s" % output[0])
 
+            if save_transcript:
+                f.write(output[0] + " ")
+            else:
+                logging.debug("Expected: %s" % reference_transcript)
+                logging.debug("WER: %s" % wer(output[0], reference_transcript))
+
+                
+
+        f.close()
 
         # Extract filename from the full file path
         filename, ext = os.path.split(os.path.basename(waveFile))

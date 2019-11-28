@@ -12,7 +12,6 @@ from deepspeech import Model
 from timeit import default_timer as timer
 
 
-
 '''
     Load the pre-trained model into the memory
          @param models: Output Grapgh Protocol Buffer file
@@ -114,5 +113,4 @@ def vad_segment_generator(wavFile, aggressiveness):
     segments = wavSplit.vad_collector(sample_rate, 30, 300, vad, frames)
 
     return segments, sample_rate, audio_length
-
 
