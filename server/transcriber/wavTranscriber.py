@@ -39,7 +39,7 @@ def load_model(models, alphabet, lm, trie):
     lm_load_end = timer() - lm_load_start
     logging.debug('Loaded language model in %0.3fs.' % (lm_load_end))
 
-    return [ds, model_load_end, lm_load_end]
+    return ds
 
 
 

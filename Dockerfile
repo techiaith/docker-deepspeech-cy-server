@@ -5,7 +5,6 @@ RUN apt-get update \
  && apt-get install -y \
 	git supervisor python3 python3-pip python3-dev \
         cmake wget curl locales vim zip zlib1g-dev \
-        rabbitmq-server \
  && pip3 install --upgrade pip
 
 
@@ -17,16 +16,16 @@ ENV LC_ALL cy_GB.UTF-8
 
 #
 RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models && mkdir -p /deepspeech/data
-COPY server/ /deepspeech/server
-
-WORKDIR /deepspeech/server 
-RUN pip3 install -r requirements.txt
 
 WORKDIR /deepspeech/models
 RUN wget -O - http://techiaith.cymru/deepspeech/macsen/models/0.5.1/macsen.tar.gz | tar xvfz -
 
 WORKDIR /deepspeech/data
 RUN wget -O - http://techiaith.cymru/deepspeech/macsen/macsen_191126.tar.gz | tar xvfz -
+
+WORKDIR /deepspeech/server 
+COPY server/ /deepspeech/server
+RUN pip3 install -r requirements.txt
 
 EXPOSE 8008
 
