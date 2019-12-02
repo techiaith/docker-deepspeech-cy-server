@@ -6,9 +6,8 @@ build:
 
 run: 
 	docker run --name deepspeech-server --restart=always \
-		-it -p 5500:8008  \
-		-v ${PWD}/server:/deepspeech/server \
-		techiaith/deepspeech-server bash
+		-it -d -p 5500:8008  \
+		techiaith/deepspeech-server 
 
 stop:
 	docker stop deepspeech-server

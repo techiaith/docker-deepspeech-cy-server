@@ -17,7 +17,7 @@ ENV LC_ALL cy_GB.UTF-8
 
 #
 RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models && mkdir -p /deepspeech/data
-COPY server/requirements.txt /deepspeech/server
+COPY server/ /deepspeech/server
 
 WORKDIR /deepspeech/server 
 RUN pip3 install -r requirements.txt
@@ -30,5 +30,5 @@ RUN wget -O - http://techiaith.cymru/deepspeech/macsen/macsen_191126.tar.gz | ta
 
 EXPOSE 8008
 
-#CMD ["/bin/bash", "-c", "/opt/skills-online-api/start.sh"]
+CMD ["/bin/bash", "-c", "/deepspeech/server/start.sh"]
 
