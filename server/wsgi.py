@@ -31,8 +31,9 @@ class DeepSpeechAPI(object):
 
         output_graph, alphabet, lm, trie = resolve_models(DEEPSPEECH_MODEL_DIR)
         cherrypy.log("Loading DeepSpeech model....")
-        self.ds = Model(output_graph, N_FEATURES, N_CONTEXT, alphabet, BEAM_WIDTH)
-        self.ds.enableDecoderWithLM(alphabet, lm, trie, LM_ALPHA, LM_BETA)
+        #self.ds = Model(output_graph, N_FEATURES, N_CONTEXT, alphabet, BEAM_WIDTH)
+        self.ds = Model(output_graph, BEAM_WIDTH)
+        self.ds.enableDecoderWithLM(lm, trie, LM_ALPHA, LM_BETA)
         cherrypy.log("Loading DeepSpeech model completed")
 
 
@@ -67,7 +68,7 @@ class DeepSpeechAPI(object):
         audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
         fin.close()
 
-        text = self.ds.stt(audio, fs)
+        text = self.ds.stt(audio)
         if len(text)==0:
             success=False
 
