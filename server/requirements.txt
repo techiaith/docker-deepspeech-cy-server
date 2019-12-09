@@ -1,7 +1,6 @@
 CherryPy==3.6.0
 gunicorn==19.5.0
 celery==4.2.1
-deepspeech==0.5.1
 webrtcvad
 numpy
 wave

@@ -1,6 +1,8 @@
 FROM ubuntu:16.04
 MAINTAINER Uned Technolegau Iaith, Prifysgol Bangor University
 
+ENV DEEPSPEECH_VERSION=0.6.0
+
 RUN apt-get update \
  && apt-get install -y \
 	git supervisor python3 python3-pip python3-dev \
@@ -18,13 +20,15 @@ ENV LC_ALL cy_GB.UTF-8
 RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models && mkdir -p /deepspeech/data
 
 WORKDIR /deepspeech/models
-RUN wget -O - http://techiaith.cymru/deepspeech/macsen/models/0.5.1/macsen.tar.gz | tar xvfz -
+RUN wget -O - http://techiaith.cymru/deepspeech/macsen/models/$DEEPSPEECH_VERSION/macsen.tar.gz | tar xvfz -
 
 WORKDIR /deepspeech/data
 RUN wget -O - http://techiaith.cymru/deepspeech/macsen/macsen_191126.tar.gz | tar xvfz -
 
 WORKDIR /deepspeech/server 
 COPY server/ /deepspeech/server
+
+RUN pip3 install deepspeech==$DEEPSPEECH_VERSION
 RUN pip3 install -r requirements.txt
 
 EXPOSE 8008
