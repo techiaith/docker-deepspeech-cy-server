@@ -45,6 +45,18 @@ class DeepSpeechAPI(object):
 
     @cherrypy.expose
     @cherrypy.tools.json_out(handler=callback_handler)
+    def versions(self):
+        result = {
+            'version': 1,
+            'deepspeech': os.environ["DEEPSPEECH_VERSION"],
+            'model_name': os.environ["MODEL_NAME"],
+            'model_version': os.environ["MODEL_VERSION"]
+        }
+        return result
+
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out(handler=callback_handler)
     def speech_to_text(self, soundfile, **kwargs):
         upload_tmp_filepath = os.path.join(self.tmp_dir, 'ds_request_' + datetime.now().strftime('%y-%m-%d_%H%M%S') + '.wav')
         with open(upload_tmp_filepath, 'wb') as wavfile:

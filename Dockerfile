@@ -3,6 +3,9 @@ MAINTAINER Uned Technolegau Iaith, Prifysgol Bangor University
 
 ENV DEEPSPEECH_VERSION=0.6.1
 
+ENV MODEL_NAME=macsen
+ENV MODEL_VERSION=200121
+
 RUN apt-get update \
  && apt-get install -y \
 	git supervisor python3 python3-pip python3-dev \
@@ -20,10 +23,7 @@ ENV LC_ALL cy_GB.UTF-8
 RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models && mkdir -p /deepspeech/data
 
 WORKDIR /deepspeech/models
-RUN wget -O - http://techiaith.cymru/deepspeech/macsen/models/$DEEPSPEECH_VERSION/macsen.tar.gz | tar xvfz -
-
-WORKDIR /deepspeech/data
-RUN wget -O - http://techiaith.cymru/deepspeech/macsen/datasets/macsen_200121.tar.gz | tar xvfz -
+RUN wget -O - http://techiaith.cymru/deepspeech/${MODEL_NAME}/models/${DEEPSPEECH_VERSION}/${MODEL_NAME}_${MODEL_VERSION}.tar.gz | tar xvfz -
 
 WORKDIR /deepspeech/server 
 COPY server/ /deepspeech/server
