@@ -1,13 +1,6 @@
 FROM ubuntu:16.04
 MAINTAINER Uned Technolegau Iaith, Prifysgol Bangor University
 
-ARG DEEPSPEECH_VERSION
-ARG MODEL_NAME
-ARG MODEL_VERSION
-
-ENV DEEPSPEECH_VERSION=${DEEPSPEECH_VERSION}
-ENV MODEL_NAME=${MODEL_NAME}
-ENV MODEL_VERSION=${MODEL_VERSION}
 
 RUN apt-get update \
  && apt-get install -y \
@@ -27,6 +20,14 @@ RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models
 
 WORKDIR /deepspeech/server 
 COPY server/ /deepspeech/server
+
+ARG DEEPSPEECH_VERSION
+ARG MODEL_NAME
+ARG MODEL_VERSION
+
+ENV DEEPSPEECH_VERSION=${DEEPSPEECH_VERSION}
+ENV MODEL_NAME=${MODEL_NAME}
+ENV MODEL_VERSION=${MODEL_VERSION}
 
 RUN pip3 install deepspeech==$DEEPSPEECH_VERSION
 RUN pip3 install -r requirements.txt
