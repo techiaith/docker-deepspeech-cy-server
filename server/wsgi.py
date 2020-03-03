@@ -6,6 +6,7 @@ import wave
 import cherrypy
 import numpy as np
 
+from packaging import version
 from datetime import datetime
 from deepspeech import Model
 
@@ -31,9 +32,18 @@ class DeepSpeechAPI(object):
 
         output_graph, alphabet, lm, trie = resolve_models(DEEPSPEECH_MODEL_DIR)
         cherrypy.log("Loading DeepSpeech model....")
-        #self.ds = Model(output_graph, N_FEATURES, N_CONTEXT, alphabet, BEAM_WIDTH)
-        self.ds = Model(output_graph, BEAM_WIDTH)
-        self.ds.enableDecoderWithLM(lm, trie, LM_ALPHA, LM_BETA)
+
+        self.deepspeech_version=os.environ["DEEPSPEECH_VERSION"]
+        self.model_name=os.environ["MODEL_NAME"]
+        self.model_version=os.environ["MODEL_VERSION"]
+
+        if version.parse(self.deepspeech_version) < version.parse("0.6.0"):
+            self.ds = Model(output_graph, N_FEATURES, N_CONTEXT, alphabet, BEAM_WIDTH)
+            self.ds.enableDecoderWithLM(alphabet, lm, trie, LM_ALPHA, LM_BETA)
+        else:
+            self.ds = Model(output_graph, BEAM_WIDTH)
+            self.ds.enableDecoderWithLM(lm, trie, LM_ALPHA, LM_BETA)
+
         cherrypy.log("Loading DeepSpeech model completed")
 
 
@@ -48,9 +58,9 @@ class DeepSpeechAPI(object):
     def versions(self):
         result = {
             'version': 1,
-            'deepspeech': os.environ["DEEPSPEECH_VERSION"],
-            'model_name': os.environ["MODEL_NAME"],
-            'model_version': os.environ["MODEL_VERSION"]
+            'deepspeech': self.deepspeech_version,
+            'model_name': self.model_name,
+            'model_version': self.model_version 
         }
         return result
 
