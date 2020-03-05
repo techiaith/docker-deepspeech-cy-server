@@ -82,17 +82,25 @@ class DeepSpeechAPI(object):
 
         #
         success = True
+        text = ''
+
         fin = wave.open(upload_tmp_filepath, 'rb')
         fs = fin.getframerate()
         if fs != 16000:
             success = False
 
-        audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
-        fin.close()
+        if success:
+            audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
+            fin.close()
 
-        text = self.ds.stt(audio)
-        if len(text)==0:
-            success=False
+            if version.parse(self.deepspeech_version) < version.parse("0.6.0"):
+                text = self.ds.stt(audio, fs)
+            else:
+                text = self.ds.stt(audio)
+
+            if len(text)==0:
+                success=False
+
 
         result.update({
             'text': text,
