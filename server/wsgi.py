@@ -22,7 +22,8 @@ BEAM_WIDTH = 500
 LM_ALPHA = 0.75
 LM_BETA = 1.85
 
-
+STATIC_PATH=os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static_html')
+class StaticRoot(object): pass
 
 class DeepSpeechAPI(object):
 
@@ -76,6 +77,8 @@ class DeepSpeechAPI(object):
                     break
                 wavfile.write(data)
 
+        cherrypy.log("tmp file written to %s" % upload_tmp_filepath)
+
         result = {
                 'version':1
         }
@@ -90,6 +93,7 @@ class DeepSpeechAPI(object):
             success = False
 
         if success:
+            cherrypy.log("Starting STT ....")
             audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
             fin.close()
 
@@ -99,7 +103,10 @@ class DeepSpeechAPI(object):
                 text = self.ds.stt(audio)
 
             if len(text)==0:
+                cherrypy.log("STT not a success")
                 success=False
+            else:
+                cherrypy.log("STT successful")
 
 
         result.update({
@@ -113,16 +120,16 @@ class DeepSpeechAPI(object):
 
 def resolve_models(dirName):
     pb = glob.glob(dirName + "/*.pb")[0]
-    cherrypy.log("model file found: %s" % pb)
+    #cherrypy.log("model file found: %s" % pb)
 
     alphabet = glob.glob(dirName + "/alphabet.txt")[0]
-    cherrypy.log("model file found: %s" % alphabet)
+    #cherrypy.log("model file found: %s" % alphabet)
     
     lm = glob.glob(dirName + "/lm.binary")[0]
-    cherrypy.log("model file found: %s" % lm)
+    #cherrypy.log("model file found: %s" % lm)
     
     trie = glob.glob(dirName + "/trie")[0]
-    cherrypy.log("model file found: %s" % trie)
+    #cherrypy.log("model file found: %s" % trie)
 
     return pb, alphabet, lm, trie
 
@@ -135,6 +142,16 @@ cherrypy.config.update({
     'log.access_file': 'deepspeech-access.log',
     'log.error_file': 'deepspeech-error.log',
 })
+
+
+cherrypy.tree.mount(StaticRoot(), '/static', config={
+    '/': {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': STATIC_PATH,
+        'tools.staticdir.index': 'index.html',
+         },
+    })
+
 
 cherrypy.tree.mount(DeepSpeechAPI(), '/')
 application = cherrypy.tree
