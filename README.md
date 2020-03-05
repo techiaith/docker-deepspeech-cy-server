@@ -1,12 +1,15 @@
-# docker-deepspeech-server
+# docker-deepspeech-server-cy
 
-## Sut i gychwyn arni..
+## Cefndir
 
 Mae na ddwy fath o beiriant adnabod lleferydd Cymraeg - y ddau wedi eu hyfforddi i ymateb yn well i wahanol defnyddiau..
 
  1 - peiriant adnabod cwestiynau neu gorchmynion i'r ap Macsen (gelwir y peiriant felly yn 'macsen')
  2 - peiriant adnabod lleferydd fwy rhydd ac agored - h.y. gyd-destun defnydd arddweud (dictation) (gelwir felly y peiriant yn 'arddweud')
  
+ 
+## Gosod
+
 Os hoffwch chi'r peiriant arddweud, yna dyma'r camau i'w ddilyn ar beiriant Mac OS X/Linux a Windows (os oes gennych chi Docker wedi'i osod) i osod yn gyntaf
 
  
@@ -16,6 +19,7 @@ $ cd docker-deepspeech-server-cy
 $ make build-arddweud
 ```
 
+## Rhedeg
 
 Yna i redeg, does ond angen un gorchymyn ychwanegol..
 
