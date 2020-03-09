@@ -137,7 +137,7 @@
         var formData = new FormData();
         formData.append("soundfile",audioData);
         $.ajax({
-          url: "/speech_to_text/",
+          url: "../speech_to_text/",
           type: "POST",
           contentType: false,
           processData: false,

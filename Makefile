@@ -2,9 +2,9 @@
 # --- Runtime with Python REST API  ----------------------------------------------------
 
 macsen-config:
-	$(eval DEEPSPEECH_VERSION = 0.6.1)
+	$(eval DEEPSPEECH_VERSION = 0.5.1)
 	$(eval MODEL_NAME = macsen)
-	$(eval MODEL_VERSION= 200121)
+	$(eval MODEL_VERSION= 200309)
 	$(eval PORT_NUMBER = 5500)
 
 arddweud-config:
@@ -41,11 +41,9 @@ run:
 		-v ${PWD}/models/${MODEL_NAME}:/deepspeech/models \
 		techiaith/deepspeech-${DEEPSPEECH_VERSION}-server
 
-
 stop:
 	-docker stop deepspeech-server-${MODEL_NAME}
 	-docker rm deepspeech-server-${MODEL_NAME}
-
 
 clean:
 	docker rmi techiaith/deepspeech-${DEEPSPEECH_VERSION}-server
