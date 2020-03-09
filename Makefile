@@ -5,7 +5,7 @@ macsen-config:
 	$(eval DEEPSPEECH_VERSION = 0.5.1)
 	$(eval MODEL_NAME = macsen)
 	$(eval MODEL_VERSION= 200309)
-	$(eval PORT_NUMBER = 5500)
+	$(eval PORT_NUMBER = 5503)
 
 arddweud-config:
 	$(eval DEEPSPEECH_VERSION = 0.5.1)
