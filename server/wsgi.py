@@ -16,12 +16,6 @@ from handlers import callback_handler
 # DeepSpeech config..
 DEEPSPEECH_MODEL_DIR='/deepspeech/models'
 
-N_FEATURES = 26
-N_CONTEXT = 9
-BEAM_WIDTH = 500
-LM_ALPHA = 0.75
-LM_BETA = 1.85
-
 STATIC_PATH=os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static_html')
 class StaticRoot(object): pass
 
@@ -31,19 +25,15 @@ class DeepSpeechAPI(object):
     def __init__(self):
         self.tmp_dir = '/tmp'
 
-        output_graph, alphabet, lm, trie = resolve_models(DEEPSPEECH_MODEL_DIR)
-        cherrypy.log("Loading DeepSpeech model....")
-
         self.deepspeech_version=os.environ["DEEPSPEECH_VERSION"]
         self.model_name=os.environ["MODEL_NAME"]
         self.model_version=os.environ["MODEL_VERSION"]
 
-        if version.parse(self.deepspeech_version) < version.parse("0.6.0"):
-            self.ds = Model(output_graph, N_FEATURES, N_CONTEXT, alphabet, BEAM_WIDTH)
-            self.ds.enableDecoderWithLM(alphabet, lm, trie, LM_ALPHA, LM_BETA)
-        else:
-            self.ds = Model(output_graph, BEAM_WIDTH)
-            self.ds.enableDecoderWithLM(lm, trie, LM_ALPHA, LM_BETA)
+        acoustic_model, language_model = self.resolve_models(DEEPSPEECH_MODEL_DIR)
+        cherrypy.log("Loading DeepSpeech model....")
+
+        self.ds = Model(acoustic_model)
+        self.ds.enableExternalScorer(language_model)
 
         cherrypy.log("Loading DeepSpeech model completed")
 
@@ -117,22 +107,16 @@ class DeepSpeechAPI(object):
         return result
 
 
+    def resolve_models(self, dirName):
+        pb_wildcard = "/*_%s.pbmm" % self.model_version
+        pb = glob.glob(dirName + pb_wildcard)[0]
+        cherrypy.log("model file found: %s" % pb)
 
-def resolve_models(dirName):
-    pb = glob.glob(dirName + "/*.pb")[0]
-    #cherrypy.log("model file found: %s" % pb)
-
-    alphabet = glob.glob(dirName + "/alphabet.txt")[0]
-    #cherrypy.log("model file found: %s" % alphabet)
+        scorer_wildcard = "/*_%s_%s.scorer" % (self.model_name, self.model_version)
+        scorer = glob.glob(dirName + scorer_wildcard)[0]
+        cherrypy.log("scorer model file found: %s" % scorer)
     
-    lm = glob.glob(dirName + "/lm.binary")[0]
-    #cherrypy.log("model file found: %s" % lm)
-    
-    trie = glob.glob(dirName + "/trie")[0]
-    #cherrypy.log("model file found: %s" % trie)
-
-    return pb, alphabet, lm, trie
-
+        return pb, scorer
 
 
 cherrypy.config.update({

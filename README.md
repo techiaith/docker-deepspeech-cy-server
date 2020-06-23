@@ -6,7 +6,7 @@ Mae 'na ddwy fath o beiriant adnabod lleferydd Cymraeg - y ddau wedi eu hyffordd
 
  1 - peiriant adnabod cwestiynau neu orchmynion i'r ap Macsen (gelwir y peiriant felly yn '*macsen*')
  
- 2 - peiriant adnabod lleferydd mwy rhydd ac agored - h.y. gyd-destun defnydd arddweud (dictation) (gelwir felly'r peiriant yn '*arddweud*')
+ 2 - peiriant adnabod lleferydd mwy rhydd ac agored - h.y. gyd-destun defnydd trawsgrifio (transcription) (gelwir felly'r peiriant yn '*transcribe*')
  
  
 ## Gosod
@@ -17,7 +17,7 @@ Os hoffwch chi'r peiriant arddweud, yna dyma'r camau i'w ddilyn ar beiriant Mac 
 ```
 $ git clone https://github.com/techiaith/docker-deepspeech-server-cy
 $ cd docker-deepspeech-server-cy
-$ make build-arddweud
+$ make build-transcribe
 ```
 
 ## Defnyddio
@@ -25,7 +25,7 @@ $ make build-arddweud
 Yna i redeg, does ond angen un gorchymyn ychwanegol..
 
 ```
-$ make run-arddweud
+$ make run-transcribe
 ```
 
 I ei brofi'n syml, mae'n bosib gyrru'r ffeil wav enghreifftiol sydd wedi'i gynnwys o fewn y project. Felly...
@@ -36,6 +36,9 @@ $ curl -F 'soundfile=@speech.wav' localhost:5501/speech_to_text/
 ```
 
 Mae modd defnyddio recordiadau eich hunain, cyn belled â'u bod ar ffurf wav ac yn 16kHz, un sianel. 
+
+Ewch i http://localhost:5501/static_html er mwyn defnyddio'r peiriant adnabod lleferydd gyda sain o feicroffon lleol. 
+
 
 ## Rhybudd
 

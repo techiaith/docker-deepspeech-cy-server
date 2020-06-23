@@ -2,9 +2,9 @@
 # --- Runtime with Python REST API  ----------------------------------------------------
 
 macsen-config:
-	$(eval DEEPSPEECH_VERSION = 0.5.1)
+	$(eval DEEPSPEECH_VERSION = 0.7.4)
 	$(eval MODEL_NAME = macsen)
-	$(eval MODEL_VERSION= 200309)
+	$(eval MODEL_VERSION= 20.06)
 	$(eval PORT_NUMBER = 5503)
 
 transcribe-config:
@@ -34,8 +34,8 @@ run:
 	if [ ! -d "models/${MODEL_NAME}" ]; then \
             mkdir -p models/${MODEL_NAME}; \
             cd models/${MODEL_NAME} && \
-	    wget -O - https://github.com/techiaith/docker-deepspeech-cy/releases/download/${MODEL_VERSION}/techiaith_bangor_${MODEL_VERSION}.pbmm;\
-	    wget -O - https://github.com/techiaith/docker-deepspeech-cy/releases/download/${MODEL_VERSION}/techiaith_bangor_${MODEL_NAME}_${MODEL_VERSION}.scorer;\
+	    wget https://github.com/techiaith/docker-deepspeech-cy/releases/download/${MODEL_VERSION}/techiaith_bangor_${MODEL_VERSION}.pbmm;\
+	    wget https://github.com/techiaith/docker-deepspeech-cy/releases/download/${MODEL_VERSION}/techiaith_bangor_${MODEL_NAME}_${MODEL_VERSION}.scorer;\
         fi
 	docker run --name deepspeech-server-${MODEL_NAME} --restart=always \
 		-it -d -p ${PORT_NUMBER}:8008  \
