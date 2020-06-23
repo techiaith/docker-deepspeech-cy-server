@@ -7,10 +7,10 @@ macsen-config:
 	$(eval MODEL_VERSION= 200309)
 	$(eval PORT_NUMBER = 5503)
 
-arddweud-config:
-	$(eval DEEPSPEECH_VERSION = 0.5.1)
-	$(eval MODEL_NAME = arddweud)
-	$(eval MODEL_VERSION = 200303)
+transcribe-config:
+	$(eval DEEPSPEECH_VERSION = 0.7.4)
+	$(eval MODEL_NAME = transcribe)
+	$(eval MODEL_VERSION = 20.06)
 	$(eval PORT_NUMBER = 5501)
 
 build-macsen: macsen-config build
@@ -18,10 +18,10 @@ run-macsen: macsen-config run
 stop-macsen: macsen-config stop
 clean-macsen: macsen-config stop clean
 
-build-arddweud: arddweud-config build
-run-arddweud: arddweud-config run
-stop-arddweud: arddweud-config stop
-clean-arddweud: arddweud-config stop clean
+build-transcribe: transcribe-config build
+run-transcribe: transcribe-config run
+stop-transcribe: transcribe-config stop
+clean-transcribe: transcribe-config stop clean
 
 build: 
 	docker build --rm -t techiaith/deepspeech-${DEEPSPEECH_VERSION}-server \
@@ -34,7 +34,8 @@ run:
 	if [ ! -d "models/${MODEL_NAME}" ]; then \
             mkdir -p models/${MODEL_NAME}; \
             cd models/${MODEL_NAME} && \
-	    wget -O - http://techiaith.cymru/deepspeech/${MODEL_NAME}/models/${DEEPSPEECH_VERSION}/${MODEL_NAME}_${MODEL_VERSION}.tar.gz | tar xvfz -;\
+	    wget -O - https://github.com/techiaith/docker-deepspeech-cy/releases/download/${MODEL_VERSION}/techiaith_bangor_${MODEL_VERSION}.pbmm;\
+	    wget -O - https://github.com/techiaith/docker-deepspeech-cy/releases/download/${MODEL_VERSION}/techiaith_bangor_${MODEL_NAME}_${MODEL_VERSION}.scorer;\
         fi
 	docker run --name deepspeech-server-${MODEL_NAME} --restart=always \
 		-it -d -p ${PORT_NUMBER}:8008  \
