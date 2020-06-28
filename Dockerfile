@@ -15,17 +15,14 @@ ENV LANG cy_GB.UTF-8
 ENV LANGUAGE cy_GB:en  
 ENV LC_ALL cy_GB.UTF-8
 
+
 #
 RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models
 
 
+#
 ARG DEEPSPEECH_VERSION
-ARG MODEL_NAME
-ARG MODEL_VERSION
-
 ENV DEEPSPEECH_VERSION=${DEEPSPEECH_VERSION}
-ENV MODEL_NAME=${MODEL_NAME}
-ENV MODEL_VERSION=${MODEL_VERSION}
 
 RUN pip3 install deepspeech==$DEEPSPEECH_VERSION
 
@@ -35,6 +32,13 @@ COPY server/ /deepspeech/server
 RUN pip3 install -r requirements.txt
 
 EXPOSE 8008
+
+#
+ARG MODEL_NAME
+ARG MODEL_VERSION
+
+ENV MODEL_NAME=${MODEL_NAME}
+ENV MODEL_VERSION=${MODEL_VERSION}
 
 CMD ["/bin/bash", "-c", "/deepspeech/server/start.sh"]
 
