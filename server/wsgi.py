@@ -23,7 +23,7 @@ class DeepSpeechAPI(object):
 
 
     def __init__(self):
-        self.tmp_dir = '/tmp'
+        self.tmp_dir = '/recordings'
 
         self.deepspeech_version=os.environ["DEEPSPEECH_VERSION"]
         self.model_name=os.environ["MODEL_NAME"]
@@ -123,8 +123,8 @@ cherrypy.config.update({
     'environment': 'production',
     'log.screen': False,
     'response.stream': True,
-    'log.access_file': 'deepspeech-access.log',
-    'log.error_file': 'deepspeech-error.log',
+    'log.access_file': '/var/log/deepspeech-server/deepspeech-access.log',
+    'log.error_file': '/var/log/deepspeech-server/deepspeech-error.log',
 })
 
 

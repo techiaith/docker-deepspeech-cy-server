@@ -39,9 +39,13 @@ build:
 		.
 
 run:
+	mkdir -p ${PWD}/log/${MODEL_NAME}
+	mkdir -p ${PWD}/recordings/${MODEL_NAME}
 	docker run --name deepspeech-server-${MODEL_NAME} --restart=always \
 		-it -d -p ${PORT_NUMBER}:8008  \
-		-v ${PWD}/models/${MODEL_NAME}:/deepspeech/models \
+		-v ${PWD}/models/${MODEL_NAME}/:/deepspeech/models \
+		-v ${PWD}/log/${MODEL_NAME}/:/var/log/deepspeech-server \
+		-v ${PWD}/recordings/${MODEL_NAME}/:/recordings \
 		techiaith/deepspeech-${DEEPSPEECH_VERSION}-server:${MODEL_NAME}
 
 stop:

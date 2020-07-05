@@ -17,7 +17,10 @@ ENV LC_ALL cy_GB.UTF-8
 
 
 #
-RUN mkdir -p /deepspeech/server && mkdir -p /deepspeech/models
+RUN mkdir -p /deepspeech/server && \
+    mkdir -p /deepspeech/models && \
+    mkdir -p /var/log/deepspeech-server && \
+    mkdir -p /recordings
 
 
 #
