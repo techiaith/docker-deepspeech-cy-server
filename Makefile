@@ -2,17 +2,18 @@ default: build-macsen run-macsen
 
 # --- Runtime with Python REST API  ----------------------------------------------------
 
-$(eval DEEPSPEECH_VERSION = 0.7.4)
+$(eval DEEPSPEECH_VERSION = 0.8.2)
 
 macsen-config:
 	$(eval MODEL_NAME = macsen)
-	$(eval MODEL_VERSION= 20.06)
+	$(eval MODEL_VERSION= 20.09)
 	$(eval PORT_NUMBER = 5503)
 
 transcribe-config:
 	$(eval MODEL_NAME = transcribe)
-	$(eval MODEL_VERSION = 20.06)
+	$(eval MODEL_VERSION = 20.09)
 	$(eval PORT_NUMBER = 5501)
+
 
 build-macsen: macsen-config build
 run-macsen: macsen-config run
@@ -53,6 +54,6 @@ stop:
 	-docker rm deepspeech-server-${MODEL_NAME}
 
 clean:
-	docker rmi techiaith/deepspeech-${DEEPSPEECH_VERSION}-server:${MODEL_NAME}
+	-docker rmi techiaith/deepspeech-${DEEPSPEECH_VERSION}-server:${MODEL_NAME}
 	rm -rf models/${MODEL_NAME}
 
