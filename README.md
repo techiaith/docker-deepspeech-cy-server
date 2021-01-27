@@ -33,6 +33,10 @@ I ei brofi'n syml, mae'n bosib gyrru'r ffeil wav enghreifftiol sydd wedi'i gynnw
 ``` 
 $ curl -F 'soundfile=@speech.wav' localhost:5501/speech_to_text/
 {"success": true, "version": 1, "text": "mae ganddynt ddau o blant mab a merch"}
+
+$ curl -F 'soundfile=@question.wav' localhost:5503/speech_to_text/
+{success": true, "version": 1, "text": "beth yw newyddion cymru"} 
+
 ```
 
 Mae modd defnyddio recordiadau eich hunain, cyn belled â'u bod ar ffurf wav ac yn 16kHz, un sianel. 

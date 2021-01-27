@@ -2,16 +2,16 @@ default: build-macsen run-macsen
 
 # --- Runtime with Python REST API  ----------------------------------------------------
 
-$(eval DEEPSPEECH_VERSION = 0.8.2)
+$(eval DEEPSPEECH_VERSION = 0.9.1)
 
 macsen-config:
 	$(eval MODEL_NAME = macsen)
-	$(eval MODEL_VERSION= 20.09)
+	$(eval MODEL_VERSION= 21.01)
 	$(eval PORT_NUMBER = 5503)
 
 transcribe-config:
 	$(eval MODEL_NAME = transcribe)
-	$(eval MODEL_VERSION = 20.09)
+	$(eval MODEL_VERSION = 21.01)
 	$(eval PORT_NUMBER = 5501)
 
 
