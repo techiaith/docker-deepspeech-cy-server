@@ -1,0 +1,7 @@
+flask
+Flask
+gunicorn
+docker
+elg
+flask_json
+Flask-JSON
