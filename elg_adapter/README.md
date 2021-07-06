@@ -2,7 +2,7 @@
 
 As the adapter is using the ELG python SDK, you need to have it installed. If it is not the case, run: 
 
-`$ pip install elg==0.4.5` 
+`$ pip install --upgrade elg[quart]==0.4.9` 
 
 and make sure it is accessible from your PATH. Run the following to verify: 
 

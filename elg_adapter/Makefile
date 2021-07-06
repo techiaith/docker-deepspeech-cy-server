@@ -32,7 +32,7 @@ build:
 
 
 build-model:
-	elg docker create --path ./adapter.py --classname Adapter
+	elg docker create --path ./adapter.py --classname Adapter --service_type quart
 	docker build -t techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME} .
 
 

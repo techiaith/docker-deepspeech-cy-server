@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /sbin/tini -- venv/bin/gunicorn --bind=0.0.0.0:8000 "--workers=$WORKERS" --worker-tmp-dir=/dev/shm "$@" adapter:app
+exec /sbin/tini -- venv/bin/hypercorn --bind=0.0.0.0:8000 "$@" adapter:app

@@ -1,14 +1,31 @@
-from elg import FlaskService
+import traceback
+
+from loguru import logger
+
+from elg import QuartService
 from elg.model import TextsResponse
+from elg.quart_service import ProcessingError
 
-import requests
 
-class Adapter(FlaskService):
+class Adapter(QuartService):
+    
+    async def process_audio(self, content):
+        try:
+            # Make the remote call
+            async with self.session.post("https://api.techiaith.org/deepspeech/macsen/speech_to_text/", data={"soundfile": content.content}) as client_response:
+                status_code = client_response.status
+                content = await client_response.json()
+        except:
+            traceback.print_exc()
+            raise ProcessingError.InternalError('Error calling API')
 
-    def process_audio(self, content):
-        response = requests.post("https://api.techiaith.org/deepspeech/macsen/speech_to_text/", files={"soundfile": content.content})
-        assert response.ok, response.content     
-        return TextsResponse(texts=[{"content": response.json()["text"]}])
+        if status_code >= 400:
+            # if your API returns sensible error messages you could include that
+            # instead of the generic message
+            raise ProcessingError.InternalError('Error calling API')
+        
+        logger.info("Return the text response")
+        return TextsResponse(texts=[{"content": content["text"]}])
 
-flask_service = Adapter("Adapter")
-app = flask_service.app
+service = Adapter("Adapter")
+app = service.app
