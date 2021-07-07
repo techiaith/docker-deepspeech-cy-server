@@ -1,5 +1,8 @@
 default: build
 
+version:
+	$(eval MODEL_VERSION = 0.1)
+
 macsen-config:
 	cp ../question.wav .
 	cp adapter-macsen.py adapter.py
@@ -11,20 +14,20 @@ transcribe-config:
 	$(eval MODEL_NAME = transcribe)
 
 
-build-macsen: macsen-config build-model
-build-transcribe: transcribe-config build-model
+build-macsen: version macsen-config build-model
+build-transcribe: version transcribe-config build-model
 
-run-macsen: macsen-config run-model
-run-transcribe: transcribe-config run-model
+run-macsen: version macsen-config run-model
+run-transcribe: version transcribe-config run-model
 
-stop-macsen: macsen-config stop-model
-stop-transcribe: transcribe-config stop-model
+stop-macsen: version macsen-config stop-model
+stop-transcribe: version transcribe-config stop-model
 
-clean-macsen: macsen-config clean-model
-clean-transcribe: transcribe-config clean-model
+clean-macsen: version macsen-config clean-model
+clean-transcribe: version transcribe-config clean-model
 
-publish-macsen: macsen-config publish-model
-publish-transcribe: transcribe-config publish-model
+publish-macsen: version macsen-config publish-model
+publish-transcribe: version transcribe-config publish-model
 
 
 build:
@@ -33,26 +36,26 @@ build:
 
 build-model:
 	elg docker create --path ./adapter.py --classname Adapter --service_type quart
-	docker build -t techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME} .
+	docker build -t techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION} .
 
 
 run-model:
 	docker run --name elg-adapter-deepspeech-server-cy-${MODEL_NAME} \
 	    --network host \
 	    -d -p 8000:8000 \
-	    techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}
+	    techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
 
 
 publish-model:
-	docker push techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}
+	docker push techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
 
 
 stop-model:
-	-docker stop elg-adapter-deepspeech-server-cy-${MODEL_NAME}
-	-docker rm elg-adapter-deepspeech-server-cy-${MODEL_NAME}
+	-docker stop elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
+	-docker rm elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
 
 
 clean-model:
-	-docker rmi techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}
+	-docker rmi techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
 
 
