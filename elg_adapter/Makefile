@@ -20,8 +20,8 @@ build-transcribe: version transcribe-config build-model
 run-macsen: version macsen-config run-model
 run-transcribe: version transcribe-config run-model
 
-stop-macsen: version macsen-config stop-model
-stop-transcribe: version transcribe-config stop-model
+stop-macsen: macsen-config stop-model
+stop-transcribe: transcribe-config stop-model
 
 clean-macsen: version macsen-config clean-model
 clean-transcribe: version transcribe-config clean-model
@@ -51,8 +51,8 @@ publish-model:
 
 
 stop-model:
-	-docker stop elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
-	-docker rm elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
+	-docker stop elg-adapter-deepspeech-server-cy-${MODEL_NAME}
+	-docker rm elg-adapter-deepspeech-server-cy-${MODEL_NAME}
 
 
 clean-model:
