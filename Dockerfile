@@ -5,7 +5,7 @@ MAINTAINER Uned Technolegau Iaith, Prifysgol Bangor University
 RUN apt-get update \
  && apt-get install -y \
 	git supervisor python3 python3-pip python3-dev \
-        cmake wget curl locales vim zip zlib1g-dev \
+        cmake wget curl locales vim zip zlib1g-dev ffmpeg \
  && pip3 install --upgrade pip
 
 

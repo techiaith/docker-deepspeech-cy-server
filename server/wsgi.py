@@ -6,6 +6,9 @@ import wave
 import cherrypy
 import numpy as np
 
+import eyed3
+from pydub import AudioSegment
+
 from packaging import version
 from datetime import datetime
 from deepspeech import Model
@@ -59,7 +62,7 @@ class DeepSpeechAPI(object):
     @cherrypy.expose
     @cherrypy.tools.json_out(handler=callback_handler)
     def speech_to_text(self, soundfile, **kwargs):
-        upload_tmp_filepath = os.path.join(self.tmp_dir, 'ds_request_' + datetime.now().strftime('%y-%m-%d_%H%M%S') + '.wav')
+        upload_tmp_filepath = os.path.join(self.tmp_dir, 'ds_request_' + datetime.now().strftime('%y-%m-%d_%H%M%S') + '.raw')
         with open(upload_tmp_filepath, 'wb') as wavfile:
             while True:
                 data = soundfile.file.read(8192)
@@ -74,23 +77,19 @@ class DeepSpeechAPI(object):
         }
 
         #
-        success = True
+        success = False
         text = ''
 
-        fin = wave.open(upload_tmp_filepath, 'rb')
-        fs = fin.getframerate()
-        if fs != 16000:
-            success = False
+        upload_filepath = self.resolve_audio_format(upload_tmp_filepath)
 
-        if success:
+        if len(upload_filepath)>0:
+            success=True
             cherrypy.log("Starting STT ....")
+            fin = wave.open(upload_filepath, 'rb')
             audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
             fin.close()
 
-            if version.parse(self.deepspeech_version) < version.parse("0.6.0"):
-                text = self.ds.stt(audio, fs)
-            else:
-                text = self.ds.stt(audio)
+            text = self.ds.stt(audio)
 
             if len(text)==0:
                 cherrypy.log("STT not a success")
@@ -105,6 +104,33 @@ class DeepSpeechAPI(object):
         })
 
         return result
+
+
+
+    def resolve_audio_format(self, upload_raw_filepath):
+        upload_filepath = upload_raw_filepath
+        mp3_audio=eyed3.load(upload_raw_filepath)
+        if mp3_audio!=None:
+            upload_filepath = upload_raw_filepath.replace(".raw", ".mp3") 
+            os.rename(upload_raw_filepath, upload_filepath)
+
+            sound = AudioSegment.from_mp3(upload_filepath)
+            sound = sound.set_frame_rate(16000)
+            sound = sound.set_channels(1)
+            sound.export(upload_filepath.replace(".mp3", ".wav"), format="wav")
+
+            upload_filepath = upload_filepath.replace(".mp3", ".wav")
+        else:
+            upload_filepath = upload_raw_filepath.replace(".raw",".wav") 
+            os.rename(upload_raw_filepath, upload_filepath)
+
+        fin = wave.open(upload_filepath, 'rb')
+        fs = fin.getframerate()
+        if fs != 16000:
+            return ''
+
+        return upload_filepath
+
 
 
     def resolve_models(self, dirName):

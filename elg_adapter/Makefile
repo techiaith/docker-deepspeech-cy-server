@@ -1,15 +1,15 @@
 default: build
 
 version:
-	$(eval MODEL_VERSION = 0.1)
+	$(eval MODEL_VERSION = 0.2)
 
 macsen-config:
-	cp ../question.wav .
+	cp ../question.* .
 	cp adapter-macsen.py adapter.py
 	$(eval MODEL_NAME = macsen)
 
 transcribe-config:
-	cp ../speech.wav .
+	cp ../speech.* .
 	cp adapter-transcribe.py adapter.py
 	$(eval MODEL_NAME = transcribe)
 
@@ -28,7 +28,6 @@ clean-transcribe: version transcribe-config clean-model
 
 publish-macsen: version macsen-config publish-model
 publish-transcribe: version transcribe-config publish-model
-
 
 build:
 	echo "Missing model name. e.g. make build-transcribe "
@@ -57,5 +56,4 @@ stop-model:
 
 clean-model:
 	-docker rmi techiaith/elg-adapter-deepspeech-server-cy-${MODEL_NAME}:${MODEL_VERSION}
-
 

@@ -2,3 +2,7 @@
 models
 log
 recordings
+elg_adapter/*.wav
+elg_adapter/Dockerfile
+elg_adapter/docker-entrypoint.sh
+elg_adapter/requirements.txt

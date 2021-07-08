@@ -6,3 +6,5 @@ webrtcvad
 numpy
 wave
 jiwer
+pydub
+eyeD3
